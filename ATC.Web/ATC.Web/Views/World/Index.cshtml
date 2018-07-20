@@ -1,0 +1,169 @@
+﻿
+@{
+    Layout = null;
+}
+
+@*<!DOCTYPE html>
+
+    <html>
+    <head>
+        <meta name="viewport" content="width=device-width" />
+        <title>World</title>
+
+        @Styles.Render("~/bundles/bootstrap")
+        @Styles.Render("~/Content/css")
+
+        <link href="~/Content/World/Index.css" rel="stylesheet" />
+    </head>
+    <body>
+        <div>
+
+            <div class="WorldMap"></div>
+
+        </div>
+    </body>
+    </html>*@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Simple Sidebar - Start Bootstrap Template</title>
+
+</head>
+
+<body>
+
+    <div id="wrapper">
+
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <li class="sidebar-brand">
+                    <a href="#">
+                        Start Bootstrap
+                    </a>
+                </li>
+                <li>
+                    <a href="#">Dashboard</a>
+                </li>
+                <li>
+                    <a href="#">Shortcuts</a>
+                </li>
+                <li>
+                    <a href="#">About</a>
+                </li>
+                <li>
+                    <a href="#">Contact</a>
+                </li>
+            </ul>
+        </div>
+        <!-- /#sidebar-wrapper -->
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+            <div class="container-fluid">
+                <h1>Simple Sidebar</h1>
+                <p>This template has a responsive menu toggling system. The menu will appear collapsed on smaller screens, and will appear non-collapsed on larger screens. When toggled using the button below, the menu will appear/disappear. On small screens, the page content will be pushed off canvas.</p>
+                <p>Make sure to keep all page content within the <code>#page-content-wrapper</code>.</p>
+                <a href="#menu-toggle" class="btn btn-secondary" id="menu-toggle">Toggle Menu</a>
+
+                <div id="app">
+                    <div>
+                        MouseClick x: <span id="map_mouse_x"></span>
+                        MouseClick y: <span id="map_mouse_y"></span>
+                        &nbsp;&nbsp;
+                        Airplane Speed <input v-model.number="airplanePosXIncrement" type="range" min="1" max="20" value="1" id="myRange">
+                        <span>{{airplanePosXIncrement}}</span>
+                        <button type="button" v-on:click='vClickStartSimulation()'>Start</button>
+                        <button type="button" v-on:click='vClickPauseSimulation()'>Pause</button>
+                    </div>
+                    <div class="row">
+                        <div class="col-2">
+                            Airport code: {{selectedAirport.code}}<br />
+                            x: {{selectedAirport.x}} y: {{selectedAirport.y}}<br />
+                            <u>Routes</u>
+                            <ul>
+                                <li v-for="route in selectedAirport.routes">{{route.code}} ({{route.path.length}} steps)</li>
+                            </ul>
+                        </div>
+                        <div class="col-8">
+
+                            <div id="WorldMap" class="WorldMap">
+                                <div id="WorldMap-GridLayer" class="WorldMap-GridLayer"></div>
+                                <div id="WorldMap-RouteLayer" class="WorldMap-RouteLayer">
+                                    <div v-for="airport in airports">
+                                        <div v-for="route in airport.routes">
+                                            <div v-for="point in route.uiPath"
+                                                 v-bind:style="{ left: point.x + 'px', top: point.y + 'px' }"
+                                                 class="WorldMap-RouteLayer-RoutePoint">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="WorldMap-AirportLayer" class="WorldMap-AirportLayer">
+                                    <div v-for="airport in airports"
+                                         v-bind:style="{ left: airport.x + 'px', top: airport.y + 'px' }"
+                                         v-bind:class="[airport === $data.selectedAirport ? 'WorldMap-Icon-Airport-Selected' : '']"
+                                         v-on:click="vclickAirport(airport);"
+                                         class="WorldMap-Icon WorldMap-Icon-Airport">
+                                        <div class="WorldMap-Icon-Airport-Title">
+                                            {{airport.code}}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="WorldMap-AirplaneLayer" class="WorldMap-AirplaneLayer">
+                                    <div v-for="airplane in airplanes"
+                                         v-bind:style="{ left: airplane.x + 'px', top: airplane.y + 'px', transform: 'rotate(' + airplane.rotateDegrees + 'deg)'}"
+                                         v-bind:class="[airplane === $data.selectedAirplane ? 'WorldMap-Icon-Airplane-Selected' : '']"
+                                         v-on:click="vclickAirplane(airplane);"
+                                         class="WorldMap-Icon WorldMap-Icon-Airplane">
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-2">
+                            Airplane code: {{selectedAirplane.code}}<br />
+                            Airplane Route: <span v-if="selectedAirplane.currentRoute">{{selectedAirplane.currentRoute.code}}</span><br />
+                            x: {{selectedAirplane.x}}<br />
+                            y: {{selectedAirplane.y}}<br />
+                            rotateDegrees: {{selectedAirplane.rotateDegrees}}<br />
+                            Trip Percentage: {{selectedAirplane.tripPercentage}}%
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+    <!-- Bootstrap core JavaScript -->
+    @Styles.Render("~/bundles/bootstrap")
+    @Styles.Render("~/Content/css")
+    <link href="~/Content/simple-sidebar.css" rel="stylesheet" />
+    <link href="~/Content/World/Index.css" rel="stylesheet" />
+
+    @Scripts.Render("~/bundles/jquery")
+    <script src="~/Scripts/vue.min.js"></script>
+    <script src="~/Scripts/app/World.Airports.js"></script>
+    <script src="~/Scripts/app/World.js"></script>
+    <!-- Menu Toggle Script -->
+    <script>
+        $("#menu-toggle").click(function (e) {
+            e.preventDefault();
+            $("#wrapper").toggleClass("toggled");
+        });
+
+        init();
+    </script>
+
+</body>
+
+</html>

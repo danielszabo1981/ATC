@@ -1,0 +1,99 @@
+﻿body {
+}
+
+
+.WorldMap {
+    position: relative;
+    background-image: url('World.jpg');
+    background-size: 100%;
+    width: 1200px;
+    height: 600px;
+}
+.WorldMap-GridLayer{
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+}
+    .WorldMap-GridLayer-Cell{
+        border: 0px solid #666;
+        border-right-width: 1px;
+        border-bottom-width: 1px;
+        height: 100px;
+        width: 100px;
+        float: left;
+    }
+
+.WorldMap-AirportLayer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+}
+
+.WorldMap-RouteLayer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+}
+    .WorldMap-RouteLayer-RoutePoint{
+        position: absolute;
+        top:0;
+        left: 0;
+        height: 2px;
+        width: 2px;
+        background-color: #FFF;
+    }
+
+.WorldMap-Icon{
+    position: absolute;
+}
+.WorldMap-Icon-Airport {
+    background-image: url('AirportIcon.png');
+    background-repeat: no-repeat;
+    background-size: 100%;
+    width: 46px;
+    height: 46px;
+    margin-top: -46px;
+    margin-left: -23px;
+    animation: airport-appear .5s;
+    cursor:pointer;
+}
+    .WorldMap-Icon-Airport-Title {
+        font-size: 10px;
+        color:#FFF;
+    }
+    .WorldMap-Icon-Airport:hover {
+        outline: 1px solid #FFF;
+    }
+
+    .WorldMap-Icon-Airport-Selected {
+        outline: 3px solid #FFF;
+        background-color: red;
+    }
+
+@keyframes airport-appear {
+   0% { width: 0; }
+}
+
+.WorldMap-Icon-Airplane {
+    background-image: url('AirplaneIcon.png');
+    background-repeat: no-repeat;
+    background-size: 100%;
+    width: 24px;
+    height: 24px;
+    margin-top: -12px;
+    margin-left: -12px;
+    cursor:pointer;
+}
+    .WorldMap-Icon-Airplane:hover{
+        outline: 3px solid #FFF;
+    }
+    .WorldMap-Icon-Airplane-Selected {
+        outline: 3px solid #FFF;
+        background-color: red;
+    }
